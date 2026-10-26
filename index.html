@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Calculadora de Lucros</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d2e;--panel2:#18263a;--text:#eef4fb;--muted:#9fb0c5;--line:#29384d;--green:#42d6a4;--blue:#66a9ff;--orange:#ffb45e;--red:#ff7d86}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#0b1220,#101b2d 55%,#0b1220);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{width:min(1100px,100%);margin:auto;padding:22px 16px 48px}.top{display:flex;align-items:center;gap:14px;margin:8px 0 22px}.logo{width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,#1d3b5f,#173e39);display:grid;place-items:center;color:var(--green);font-size:25px;border:1px solid #35506b}.top h1{font-size:clamp(24px,4vw,34px);margin:0;letter-spacing:-.7px}.top p{margin:3px 0 0;color:var(--muted)}.tag{margin-left:auto;border:1px solid #2d4b4a;color:var(--green);border-radius:99px;padding:6px 10px;font-size:12px;white-space:nowrap}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.card{background:rgba(18,29,46,.94);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 10px 30px #00000014}.card h2{font-size:18px;margin:0 0 5px}.sub{color:var(--muted);margin:0 0 18px;font-size:13px}.field{margin:14px 0}.field label,.label{display:block;font-size:13px;font-weight:650;margin-bottom:7px;color:#d9e5f3}.hint{font-size:12px;color:var(--muted);margin-top:5px}.inputrow{position:relative}.inputrow span{position:absolute;left:12px;top:10px;color:var(--muted)}input,select{width:100%;background:#0d1726;border:1px solid #33445c;border-radius:10px;color:var(--text);padding:11px 12px;font:inherit;outline:none}input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #66a9ff1a}.money{padding-left:42px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.days{display:flex;flex-wrap:wrap;gap:7px}.day{position:relative}.day input{position:absolute;opacity:0;pointer-events:none}.day span{display:inline-flex;padding:8px 11px;border:1px solid #33445c;border-radius:9px;color:#bdcadd;cursor:pointer;font-size:13px}.day input:checked+span{background:#163c37;border-color:#2a8c72;color:#80f0c8}.radio-line{display:flex;gap:10px;flex-wrap:wrap}.radio-line label{display:flex;gap:7px;align-items:center;font-size:13px;color:#d6e1ef}.radio-line input{width:auto;accent-color:var(--green)}.btn{border:0;border-radius:11px;padding:12px 15px;font:inherit;font-weight:750;cursor:pointer;transition:.15s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.primary{background:var(--green);color:#06251d}.secondary{background:#20344e;color:#e8f2ff;border:1px solid #3a526e}.danger{background:#482632;color:#ffc5cb;border:1px solid #70404b}.full{width:100%}.results{grid-column:1/-1}.hero-result{background:linear-gradient(120deg,#143c36,#172e40);border:1px solid #2b6b5b;border-radius:15px;padding:20px;margin:15px 0}.hero-result .small{font-size:13px;color:#aee6d4}.hero-result strong{display:block;font-size:clamp(32px,6vw,45px);line-height:1.2;letter-spacing:-1.2px;color:#6aefbd;margin:5px 0}.hero-result p{margin:0;color:#d0e8e1;font-size:13px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#0e1928;border:1px solid #27394f;border-radius:12px;padding:13px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:20px;margin-top:5px;overflow-wrap:anywhere}.stat .green{color:var(--green)}.stat .orange{color:var(--orange)}.notice{border-radius:10px;padding:11px 13px;margin:12px 0;font-size:13px;background:#17283b;border:1px solid #30465f;color:#c8d9ec}.notice.warn{background:#3b2b1b;border-color:#78552b;color:#ffdaa7}.notice.good{background:#15362e;border-color:#286e59;color:#a8f2d7}.tripbox{display:flex;gap:9px;align-items:end}.tripbox .field{flex:1;margin:8px 0}.triplist{list-style:none;padding:0;margin:10px 0 0}.triplist li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #26364a;font-size:13px}.triplist li:last-child{border-bottom:0}.triplist button{margin-left:8px}.footer{color:#8294aa;font-size:12px;text-align:center;margin-top:18px}.hidden{display:none!important}.sectionline{border:0;border-top:1px solid var(--line);margin:18px 0}.smallbtn{font-size:12px;padding:5px 8px}.result-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.result-title span{font-size:12px;color:var(--muted)}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.results{grid-column:auto}.stats{grid-template-columns:1fr 1fr}.tag{display:none}.card{padding:16px}.wrap{padding:14px 12px 34px}.two{gap:9px}}
+@media print{body{background:white;color:#111}.wrap{width:100%;padding:0}.card,.stat,.hero-result{background:white!important;color:#111!important;box-shadow:none;border:1px solid #bbb}.sub,.hint,.footer,.tag{color:#555!important}.top p,.hero-result p,.hero-result .small,.stat span{color:#444!important}.hero-result strong,.stat strong{color:#111!important}.layout{display:block}.card{margin-bottom:12px}.btn,.tripbox,.day,.radio-line{display:none!important}input,select{border:0;background:white;color:#111;padding:0}.results{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo" aria-hidden="true">↗</div>
+    <div><h1>Calculadora de Lucros</h1><p>Planeje sua meta diária e acompanhe cada corrida.</p></div>
+    <div class="tag">FATURAMENTO BRUTO</div>
+  </header>
+
+  <main class="layout">
+    <section class="card">
+      <h2>1. Sua meta e jornada</h2>
+      <p class="sub">Preencha os dados para calcular o valor médio necessário por corrida.</p>
+      <div class="field">
+        <label for="goal">Quanto você quer faturar hoje?</label>
+        <div class="inputrow"><span>R$</span><input id="goal" class="money" type="number" min="0.01" step="0.01" value="300"></div>
+      </div>
+      <div class="field">
+        <label for="targetTrips">Quantas corridas quer fazer hoje?</label>
+        <input id="targetTrips" type="number" min="1" step="1" value="20">
+      </div>
+      <div class="two">
+        <div class="field"><label for="start">Horário para começar</label><input id="start" type="time" value="07:00"></div>
+        <div class="field"><label for="end">Horário para terminar</label><input id="end" type="time" value="17:00"></div>
+      </div>
+      <div class="field">
+        <label>Quais dias costumam ter mais movimento?</label>
+        <div class="days" id="days">
+          <label class="day"><input type="checkbox" value="Segunda"><span>Seg</span></label>
+          <label class="day"><input type="checkbox" value="Terça"><span>Ter</span></label>
+          <label class="day"><input type="checkbox" value="Quarta"><span>Qua</span></label>
+          <label class="day"><input type="checkbox" value="Quinta"><span>Qui</span></label>
+          <label class="day"><input type="checkbox" value="Sexta" checked><span>Sex</span></label>
+          <label class="day"><input type="checkbox" value="Sábado" checked><span>Sáb</span></label>
+          <label class="day"><input type="checkbox" value="Domingo"><span>Dom</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="peak">Qual horário costuma ter mais movimento?</label>
+        <select id="peak">
+          <option value="Manhã (6h às 10h)">Manhã (6h às 10h)</option>
+          <option value="Horário do almoço (11h às 14h)">Horário do almoço (11h às 14h)</option>
+          <option value="Fim de tarde (16h às 19h)">Fim de tarde (16h às 19h)</option>
+          <option value="Noite (19h às 23h)">Noite (19h às 23h)</option>
+          <option value="Madrugada (23h às 6h)">Madrugada (23h às 6h)</option>
+          <option value="Varia conforme o dia">Varia conforme o dia</option>
+        </select>
+        <p class="hint">Essa informação ajuda a sugerir a organização da jornada; não prevê demanda real.</p>
+      </div>
+      <button class="btn primary full" id="recalc">Calcular minha meta</button>
+    </section>
+
+    <section class="card">
+      <h2>2. Registre suas corridas</h2>
+      <p class="sub">Cada valor registrado é abatido da meta de faturamento e a recomendação é atualizada.</p>
+      <div class="field">
+        <label>Você já fez alguma corrida hoje?</label>
+        <div class="radio-line">
+          <label><input type="radio" name="already" value="no" checked> Ainda não</label>
+          <label><input type="radio" name="already" value="yes"> Sim</label>
+        </div>
+      </div>
+      <div id="firstTrip" class="hidden">
+        <div class="field"><label for="firstValue">Qual foi o valor recebido nessa corrida?</label><div class="inputrow"><span>R$</span><input id="firstValue" class="money" type="number" min="0" step="0.01" placeholder="Ex.: 18,50"></div></div>
+        <button class="btn secondary full" id="addFirst">Registrar primeira corrida</button>
+      </div>
+      <hr class="sectionline">
+      <div class="field">
+        <label for="tripValue">Valor recebido na corrida concluída</label>
+        <div class="tripbox">
+          <div class="field"><div class="inputrow"><span>R$</span><input id="tripValue" class="money" type="number" min="0.01" step="0.01" placeholder="Ex.: 16,50"></div></div>
+          <button class="btn primary" id="addTrip">+ Registrar</button>
+        </div>
+        <p class="hint">Registre uma corrida por vez. Só inclua valores efetivamente recebidos.</p>
+      </div>
+      <div class="result-title"><strong>Corridas registradas</strong><span id="tripCount">0 corridas</span></div>
+      <ul class="triplist" id="tripList"><li id="emptyTrips" style="color:var(--muted)">Nenhuma corrida registrada ainda.</li></ul>
+      <hr class="sectionline">
+      <button class="btn secondary full" id="newDay">Começar um novo dia</button>
+    </section>
+
+    <section class="card results" id="results">
+      <div class="result-title"><h2>Seu planejamento de hoje</h2><span id="dateLabel"></span></div>
+      <div class="hero-result">
+        <div class="small">Valor médio necessário por corrida restante</div>
+        <strong id="perTrip">R$ 15,00</strong>
+        <p id="perTripNote">Meta restante dividida pelas corridas que faltam.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><span>Meta diária</span><strong id="rGoal">R$ 300,00</strong></div>
+        <div class="stat"><span>Já faturado</span><strong id="rEarned" class="green">R$ 0,00</strong></div>
+        <div class="stat"><span>Falta faturar</span><strong id="rRemaining" class="orange">R$ 300,00</strong></div>
+        <div class="stat"><span>Corridas restantes</span><strong id="rTrips">20</strong></div>
+        <div class="stat"><span>Tempo disponível</span><strong id="rHours">10 h</strong></div>
+        <div class="stat"><span>Meta por hora</span><strong id="rHourly">R$ 30,00</strong></div>
+        <div class="stat"><span>Corridas por hora</span><strong id="rPace">2,0</strong></div>
+        <div class="stat"><span>Progresso da meta</span><strong id="rProgress">0%</strong></div>
+      </div>
+      <div class="notice" id="advice">Registre as corridas concluídas para acompanhar a evolução da meta.</div>
+      <div class="notice" id="schedule">Sugestão de planejamento aparecerá aqui.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+        <button class="btn secondary" id="print">Imprimir resumo</button>
+        <button class="btn secondary" id="export">Exportar CSV</button>
+        <button class="btn danger" id="clear">Apagar dados do dia</button>
+      </div>
+      <p class="hint">Importante: o valor recomendado é uma média de faturamento bruto, não uma garantia de aceitação ou de lucro. Combustível, taxas e outros custos não são descontados nesta versão.</p>
+    </section>
+  </main>
+  <p class="footer">Seus dados ficam salvos neste navegador neste aparelho. Para não perder o histórico, exporte o resumo regularmente.</p>
+</div>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const money = n => (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  const stateKey = 'calculadoraLucrosState_v1';
+  let trips = [];
+  let firstTripPromptHandled = false;
+  const getConfig = () => ({
+    goal: Math.max(0, Number($('goal').value)||0),
+    targetTrips: Math.max(0, Math.floor(Number($('targetTrips').value)||0)),
+    start: $('start').value || '07:00',
+    end: $('end').value || '17:00',
+    peak: $('peak').value,
+    days: [...document.querySelectorAll('#days input:checked')].map(x=>x.value)
+  });
+  function durationHours(start,end){
+    if(!start || !end) return 0;
+    const [sh,sm]=start.split(':').map(Number), [eh,em]=end.split(':').map(Number);
+    let mins=eh*60+em-(sh*60+sm); if(mins<=0) mins+=1440;
+    return mins/60;
+  }
+  function save(){
+    const data={config:getConfig(),trips};
+    try{localStorage.setItem(stateKey,JSON.stringify(data));}catch(e){}
+  }
+  function renderTrips(){
+    const ul=$('tripList'); ul.innerHTML='';
+    if(!trips.length){const li=document.createElement('li');li.id='emptyTrips';li.style.color='var(--muted)';li.textContent='Nenhuma corrida registrada ainda.';ul.appendChild(li);}
+    trips.forEach((t,i)=>{
+      const li=document.createElement('li');
+      const left=document.createElement('span');left.textContent=`Corrida ${i+1} · ${t.time}`;
+      const right=document.createElement('span');right.style.whiteSpace='nowrap';right.textContent=money(t.value)+' ';
+      const b=document.createElement('button');b.className='btn danger smallbtn';b.textContent='Remover';b.type='button';b.setAttribute('aria-label',`Remover corrida ${i+1}`);b.onclick=()=>{trips.splice(i,1);render();};
+      right.appendChild(b);li.append(left,right);ul.appendChild(li);
+    });
+    $('tripCount').textContent=`${trips.length} ${trips.length===1?'corrida':'corridas'}`;
+  }
+  function render(){
+    const c=getConfig(), earned=trips.reduce((s,t)=>s+t.value,0), remaining=Math.max(0,c.goal-earned);
+    const remainingTrips=Math.max(0,c.targetTrips-trips.length), hours=durationHours(c.start,c.end);
+    const per=remainingTrips>0?remaining/remainingTrips:0, hourly=hours>0?remaining/hours:0;
+    const progress=c.goal>0?Math.min(100,earned/c.goal*100):0;
+    $('rGoal').textContent=money(c.goal);$('rEarned').textContent=money(earned);$('rRemaining').textContent=money(remaining);
+    $('rTrips').textContent=remainingTrips;$('rHours').textContent=hours.toLocaleString('pt-BR',{maximumFractionDigits:1})+' h';
+    $('rHourly').textContent=money(hourly);$('rPace').textContent=hours>0?(c.targetTrips/hours).toLocaleString('pt-BR',{maximumFractionDigits:1}):'—';
+    $('rProgress').textContent=progress.toLocaleString('pt-BR',{maximumFractionDigits:1})+'%';
+    $('perTrip').textContent=remainingTrips>0?money(per):(remaining<=0?'Meta atingida!':'Defina corridas');
+    $('perTripNote').textContent=remaining<=0?'Você já alcançou ou ultrapassou sua meta de faturamento bruto.':remainingTrips>0?`${money(remaining)} restantes ÷ ${remainingTrips} corridas restantes.`:'Não há corridas restantes na meta informada. Aumente a quantidade planejada se ainda precisar faturar.';
+    const advice=$('advice'); advice.className='notice';
+    if(c.goal<=0 || c.targetTrips<=0){advice.className='notice warn';advice.textContent='Informe uma meta diária maior que zero e pelo menos uma corrida planejada.';}
+    else if(earned>=c.goal){advice.className='notice good';advice.textContent='Meta diária alcançada! Você pode continuar registrando corridas; o faturamento será atualizado.';}
+    else if(remainingTrips===0){advice.className='notice warn';advice.textContent=`Você ainda precisa faturar ${money(remaining)}, mas já atingiu a quantidade de corridas planejada. Reavalie sua meta ou a quantidade de corridas.`;}
+    else if(per>0){advice.textContent=`Para atingir a meta, busque uma média de ${money(per)} nas ${remainingTrips} corridas restantes. Corridas abaixo desse valor aumentam a média necessária nas próximas.`;}
+    const schedule=$('schedule');schedule.className='notice';
+    const days=c.days.length?c.days.join(', '):'nenhum dia selecionado';
+    schedule.textContent=`Jornada: ${c.start}–${c.end} (${hours.toLocaleString('pt-BR',{maximumFractionDigits:1})} h). Dias de maior movimento informados: ${days}. Período de pico informado: ${c.peak}. Priorize esse período se ele estiver dentro da sua jornada; a calculadora não tem acesso à demanda em tempo real.`;
+    $('dateLabel').textContent=new Date().toLocaleDateString('pt-BR');
+    renderTrips();save();
+  }
+  function addTrip(value){
+    const v=Number(value);
+    if(!Number.isFinite(v)||v<=0){alert('Informe um valor de corrida maior que zero.');return false;}
+    trips.push({value:Math.round(v*100)/100,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})});
+    $('tripValue').value='';$('firstValue').value='';
+    document.querySelector('input[name="already"][value="yes"]').checked=true;
+    $('firstTrip').classList.add('hidden');render();return true;
+  }
+  document.querySelectorAll('input[name="already"]').forEach(el=>el.addEventListener('change',()=>{
+    $('firstTrip').classList.toggle('hidden',document.querySelector('input[name="already"]:checked').value!=='yes'||trips.length>0);
+  }));
+  $('addFirst').addEventListener('click',()=>{if(addTrip($('firstValue').value))firstTripPromptHandled=true;});
+  $('addTrip').addEventListener('click',()=>addTrip($('tripValue').value));
+  $('tripValue').addEventListener('keydown',e=>{if(e.key==='Enter')addTrip($('tripValue').value);});
+  $('recalc').addEventListener('click',render);
+  ['goal','targetTrips','start','end','peak'].forEach(id=>$(id).addEventListener('input',render));
+  document.querySelectorAll('#days input').forEach(el=>el.addEventListener('change',render));
+  $('newDay').addEventListener('click',()=>{
+    if(!confirm('Começar um novo dia? As corridas registradas hoje serão apagadas.'))return;
+    trips=[];$('firstValue').value='';$('tripValue').value='';
+    document.querySelector('input[name="already"][value="no"]').checked=true;$('firstTrip').classList.add('hidden');render();
+  });
+  $('clear').addEventListener('click',()=>{
+    if(!confirm('Apagar todas as corridas registradas e reiniciar os resultados do dia?'))return;
+    trips=[];$('firstValue').value='';$('tripValue').value='';document.querySelector('input[name="already"][value="no"]').checked=true;$('firstTrip').classList.add('hidden');render();
+  });
+  $('print').addEventListener('click',()=>window.print());
+  $('export').addEventListener('click',()=>{
+    const c=getConfig(), earned=trips.reduce((s,t)=>s+t.value,0);
+    const rows=[['Data',new Date().toLocaleDateString('pt-BR')],['Meta diária (R$)',c.goal],['Corridas planejadas',c.targetTrips],['Faturamento registrado (R$)',earned],['Corridas registradas',trips.length],['Horário inicial',c.start],['Horário final',c.end],['Período de pico',c.peak],['Dias de maior movimento',c.days.join('; ')],[],['Corrida','Horário','Valor (R$)'],...trips.map((t,i)=>[i+1,t.time,t.value.toFixed(2).replace('.',',')])];
+    const csv=rows.map(r=>r.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');
+    const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='calculadora-de-lucros.csv';a.click();URL.revokeObjectURL(url);
+  });
+  function load(){
+    try{
+      const data=JSON.parse(localStorage.getItem(stateKey)||'null');
+      if(data){
+        if(data.config){
+          if(Number.isFinite(data.config.goal))$('goal').value=data.config.goal;
+          if(Number.isFinite(data.config.targetTrips))$('targetTrips').value=data.config.targetTrips;
+          if(data.config.start)$('start').value=data.config.start;
+          if(data.config.end)$('end').value=data.config.end;
+          if(data.config.peak)$('peak').value=data.config.peak;
+          if(Array.isArray(data.config.days))document.querySelectorAll('#days input').forEach(el=>el.checked=data.config.days.includes(el.value));
+        }
+        if(Array.isArray(data.trips))trips=data.trips.filter(t=>Number.isFinite(t.value)&&t.value>0);
+      }
+    }catch(e){}
+    if(trips.length){document.querySelector('input[name="already"][value="yes"]').checked=true;}
+    render();
+  }
+  load();
+})();
+</script>
+</body>
+</html>
